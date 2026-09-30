@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="20 вопросов с подвохом. Для мальчиков, девочек и тех, кто «просто спросить».">
+<meta property="og:title" content="Какой ты гей? 🌈">
+<meta property="og:description" content="20 вопросов с подвохом. Дива, качок, лесби с карабином или натурал под прикрытием?">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tiktogem.github.io/fun-quiz/">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>Какой ты гей?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Onest:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: одна колонка-«журнальная карточка» 560px, экран за экраном: обложка → вопрос → результат */
+:root{
+  --paper:#FFF3F7; --card:#FFFFFF; --ink:#22101A; --muted:#7A5A69;
+  --pink:#E4007C; --pink-ink:#FFFFFF; --butter:#FFD23F; --butter-ink:#22101A; --line:#F2C9DA;
+  --display:"Rubik Mono One","Arial Black",system-ui,sans-serif;
+  --body:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1B0E15; --card:#27141F; --ink:#FBE9F1; --muted:#C3A2B2;
+  --pink:#FF4FA8; --pink-ink:#1B0E15; --butter:#FFD23F; --butter-ink:#1B0E15; --line:#3E2433; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#1B0E15; --card:#27141F; --ink:#FBE9F1; --muted:#C3A2B2;
+  --pink:#FF4FA8; --pink-ink:#1B0E15; --butter:#FFD23F; --butter-ink:#1B0E15; --line:#3E2433; color-scheme:dark}
+
+html,body{min-height:100%}
+body{background:var(--paper);color:var(--ink);font:500 16px/1.45 var(--body);padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.mast{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.mast b{color:var(--pink)}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:22px;padding:22px 20px;box-shadow:6px 6px 0 var(--pink)}
+h1,h2{font-family:var(--display);font-weight:400;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,10vw,52px);letter-spacing:-.01em}
+h1 .hl{background:var(--butter);color:var(--butter-ink);padding:0 .12em;border-radius:6px}
+h2{font-size:clamp(21px,5.6vw,27px)}
+p{margin:0}
+.lede{font-size:17px;color:var(--ink)}
+.small{font-size:13px;color:var(--muted)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:700;white-space:nowrap}
+.btn{appearance:none;border:2px solid var(--ink);background:var(--pink);color:var(--pink-ink);font:800 17px/1 var(--body);padding:17px 20px;border-radius:16px;cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:8px;transition:transform .12s ease}
+.btn:active{transform:translate(2px,2px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.yellow{background:var(--butter);color:var(--butter-ink)}
+.btn:focus-visible,.opt:focus-visible,.back:focus-visible{outline:3px solid var(--butter);outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.row>*{flex:1 1 200px}
+
+/* вопрос */
+.prog{display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--pink);border-radius:99px;transition:width .25s ease}
+.count{font-family:var(--display);font-size:14px;font-variant-numeric:tabular-nums;min-width:4.2em;text-align:right}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{appearance:none;display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:16px;padding:14px 14px;font:500 16px/1.35 var(--body);cursor:pointer;transition:border-color .12s,background .12s,transform .12s}
+.opt:hover{border-color:var(--pink)}
+.opt.picked{border-color:var(--pink);background:var(--pink);color:var(--pink-ink)}
+.opt .k{flex:0 0 30px;height:30px;border-radius:9px;border:2px solid currentColor;display:grid;place-items:center;font-family:var(--display);font-size:13px}
+.opt span:last-child{min-width:0}
+.back{appearance:none;background:none;border:0;color:var(--muted);font:700 14px var(--body);cursor:pointer;padding:6px 0;align-self:flex-start}
+.back[disabled]{opacity:.35;cursor:default}
+
+/* результат */
+.emoji{font-size:64px;line-height:1}
+.verdict{display:flex;gap:16px;align-items:center}
+.tag{display:inline-block;background:var(--butter);color:var(--butter-ink);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:8px}
+.mix{display:flex;flex-direction:column;gap:9px}
+.mixrow{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:4px 10px;align-items:center;font-size:14px}
+.mixrow .nm{font-weight:700;min-width:0}
+.mixrow .pc{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700}
+.mixrow .tr{grid-column:1/-1;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.mixrow .tr i{display:block;height:100%;background:var(--pink);border-radius:99px}
+.mixrow.top .tr i{background:var(--butter)}
+.toast{font-size:13px;color:var(--pink);font-weight:700;min-height:1.2em}
+.foot{text-align:center}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="mast"><span>Журнал <b>«Не для мамы»</b></span><span>тест №69</span></div>
+
+  <!-- обложка -->
+  <section id="intro" class="card stack">
+    <h1>Какой ты <span class="hl">гей?</span></h1>
+    <p class="lede">20 вопросов с подвохом. Для мальчиков, девочек и тех, кто «просто спросить». Отвечай честно: дедушка Фрейд всё видит.</p>
+    <div class="chips" aria-label="Возможные результаты">
+      <span class="chip">👑 Дива</span><span class="chip">💪 Качок-бро</span><span class="chip">🐈 Интеллигент с котом</span><span class="chip">🪩 Тусовочный хаос</span><span class="chip">🧗 Лесби с карабином</span><span class="chip">🔮 Лесби-ведьмочка</span><span class="chip">🫣 Натурал под прикрытием</span>
+    </div>
+    <button class="btn" id="start" type="button">Погнали 💅</button>
+    <p class="small">Занимает 2 минуты. Результат не принимается ни в одной поликлинике.</p>
+  </section>
+
+  <!-- вопрос -->
+  <section id="quiz" class="card stack" hidden>
+    <div class="prog"><div class="bar" aria-hidden="true"><i id="barfill"></i></div><span class="count" id="count">01/20</span></div>
+    <h2 id="qtext"></h2>
+    <div class="opts" id="opts" role="group" aria-labelledby="qtext"></div>
+    <button class="back" id="back" type="button">← Назад</button>
+  </section>
+
+  <!-- результат -->
+  <section id="result" class="card stack" hidden>
+    <span class="tag">Твой результат</span>
+    <div class="verdict"><div class="emoji" id="remoji"></div><h2 id="rname"></h2></div>
+    <p class="lede" id="rtext"></p>
+    <div class="stack">
+      <p class="small">Твой внутренний состав:</p>
+      <div class="mix" id="mix"></div>
+    </div>
+    <div class="row">
+      <a class="btn yellow" id="tgshare" href="https://t.me/share/url" target="_blank" rel="noopener">Отправить в Telegram</a>
+      <button class="btn ghost" id="copy" type="button">Скопировать результат</button>
+    </div>
+    <p class="toast" id="toast" aria-live="polite"></p>
+    <button class="btn" id="again" type="button">Пройти ещё раз</button>
+  </section>
+
+  <p class="small foot">Тест для хорошего настроения. Все типажи прекрасны 🌈</p>
+</div>
+
+<script>
+const SHARE_URL = "https://tiktogem.github.io/fun-quiz/"; // ссылка на эту страницу
+
+const TYPES = {
+  diva:    {e:"👑", n:"Дива", t:"Ты заходишь, и в комнате становится светлее. Или это блестит твой пиджак. Подружки получают скрины раньше, чем ты дочитал(а) сообщение, каблуки едут даже на дачу, а драму ты не устраиваешь, ты её продюсируешь."},
+  bro:     {e:"💪", n:"Качок-бро", t:"Твоя любовь — зал, курица с рисом и зеркало. Разговоры короткие, плечи широкие, в дверь заходишь боком. Зато на любом переезде ты главный человек, а объятия засчитываются как кардио."},
+  cat:     {e:"🐈", n:"Интеллигент с котом", t:"Вино, книги, льняная рубашка и кот, с которым вы вместе осуждаете мир. Ты выслушаешь, поймёшь и посоветуешь французский фильм на 3 часа. Снаружи спокойствие, внутри роман на 600 страниц."},
+  chaos:   {e:"🪩", n:"Тусовочный хаос", t:"Ты причина, почему у всех есть смешные истории. Спать некогда, домой рано, живёшь у друга третью неделю. Где ты, там вечеринка, даже если это очередь в МФЦ."},
+  hike:    {e:"🧗", n:"Лесби с карабином", t:"Клетчатая рубашка, девять штук. Карабин с ножом и открывашкой. Ты починишь полку, разведёшь костёр под дождём и донесёшь рюкзак подруги до вершины. На свадьбу — в треккинговых ботинках, и все это уважают."},
+  witch:   {e:"🔮", n:"Лесби-ведьмочка", t:"23 растения с именами, три спасённые кошки и таро на все случаи жизни. Со всеми бывшими дружишь, на второе свидание приезжаешь с вещами. Луна в Раке объясняет всё."},
+  straight:{e:"🫣", n:"Натурал под прикрытием", t:"Ты проходишь этот тест «просто посмотреть». У тебя одно пластиковое растение, радио «Дача» в машине и отпуск в Турции с мамой. Но ты дошёл(ла) до 20-го вопроса. Мы всё видим 👀"}
+};
+
+const Q = [
+ ["Ты заходишь на вечеринку. Первое, что делаешь?",
+  [["Кричу «ДЕВОЧКИ, Я ЗДЕСЬ!»","diva"],["Ищу, куда поставить шейкер с протеином","bro"],["Нахожу хозяйского кота и сижу с ним весь вечер","cat"],["Уже танцую на столе, хотя зашёл(ла) 40 секунд назад","chaos"]]],
+ ["Второе свидание прошло отлично. Что дальше?",
+  [["Арендую «Газель», мы съезжаемся","witch"],["Зову в поход на три дня, проверим отношения горой","hike"],["Третье свидание, как у нормальных людей","straight"],["Рассказываю подружкам со скринами и голосовыми","diva"]]],
+ ["Что висит у тебя на джинсах?",
+  [["Карабин: ключи, открывашка, нож, фонарик","hike"],["Ничего, я не понимаю вопрос","straight"],["Это не карабин, это подвеска, и она дороже твоей зарплаты","diva"],["Висел браслет с тусовки, потерялся на афтепати","chaos"]]],
+ ["Сколько у тебя комнатных растений?",
+  [["23, у каждого имя и знак зодиака","witch"],["Одно. Пластиковое","straight"],["Не знаю, их поливает кот","cat"],["Растения — это типа клетчатка? Беру","bro"]]],
+ ["Любимая обувь:",
+  [["Каблуки. Даже в Ашан","diva"],["Треккинговые ботинки, я и на свадьбу в них","hike"],["Штангетки для приседа","bro"],["Те, в которых можно танцевать 8 часов подряд","chaos"]]],
+ ["Тебя спрашивают: «А ты кто по знаку зодиака?»",
+  [["Солнце в Скорпионе, Луна в Раке, асцендент в драме","witch"],["Бицепс","bro"],["Интересно, почему людям так нужна астрология… (начинаю лекцию)","cat"],["Эээ… а это важно?","straight"]]],
+ ["Идеальный отпуск:",
+  [["Палатка, костёр, гора, никакого вайфая","hike"],["Миконос, три клуба за ночь, сон в самолёте","chaos"],["Париж, но только музеи и одна любимая кофейня","cat"],["Турция, всё включено, с мамой","straight"]]],
+ ["Какая рубашка у тебя в шкафу?",
+  [["Клетчатая фланелевая. Девять таких","hike"],["Шёлковая, леопардовая, расстёгнута до пупка","diva"],["Рубашка? У меня майки без рукавов","bro"],["Льняная, бежевая, мятая ровно настолько, насколько надо","cat"]]],
+ ["Как ты решаешь конфликт?",
+  [["Раскладываю таро: карты скажут, кто виноват","witch"],["Предлагаю армрестлинг","bro"],["Ухожу танцевать, само рассосётся","chaos"],["Молчу и жду, пока все забудут","straight"]]],
+ ["Сколько бывших, с которыми ты до сих пор дружишь?",
+  [["Все. Мы вместе празднуем дни рождения, и одна из них — крёстная моей кошки","witch"],["Ноль. Всех заблокировал(а) с драмой и публичным постом","diva"],["Не помню, кто из них бывший, а кто просто знакомый с тусовки","chaos"],["Бывших? Был один роман в 11-м классе","straight"]]],
+ ["Нужно повесить полку. Твои действия?",
+  [["Достаю свой набор инструментов на 86 предметов","hike"],["Звоню знакомому качку и красиво стою рядом","diva"],["Прижимаю полку к стене, держится на силе воли","bro"],["Читаю три статьи об истории полок и не вешаю","cat"]]],
+ ["Что играет у тебя в машине?",
+  [["Бритни, Гага, Бейонсе по кругу, окна открыты","diva"],["Фонк на максимум","bro"],["Французская певица из 60-х, ты её не знаешь","cat"],["Что поймалось по радио","straight"]]],
+ ["Расскажи про своих животных:",
+  [["Три спасённые кошки, у всех травма и свой психолог","witch"],["Один сиамский кот, мы вместе читаем","cat"],["Кот друга. Я у него живу, это считается?","chaos"],["Большая собака, ходит со мной в горы","hike"]]],
+ ["Ты на пляже. Что происходит?",
+  [["Майки уже нет, иду за маслом","bro"],["Сначала 40 минут фотосессии, потом, может, море","diva"],["Сижу в тени в шляпе с книгой","cat"],["Какой пляж, я плаваю в горном озере в походе","hike"]]],
+ ["4 утра. Чем ты занят(а)?",
+  [["Танцую","chaos"],["Сплю, в 6 зал","bro"],["Пятый час обсуждаю с девушкой наши чувства","witch"],["Сплю, как нормальный человек","straight"]]],
+ ["Твой любимый напиток:",
+  [["Шампанское, но только из красивого бокала","diva"],["Облепиховый чай из термоса на вершине","hike"],["Овсяный латте и разговор о травмах","witch"],["Что нальют","chaos"]]],
+ ["Любимый предмет в школе:",
+  [["Физра","bro"],["Литература, я до сих пор спорю с учебником","cat"],["Труды. Мои табуретки были лучше всех","hike"],["Перемена","chaos"]]],
+ ["Бывший(ая) пишет тебе в 2 ночи «не спишь?». Реакция?",
+  [["Скрин в чат подружкам через 0,5 секунды","diva"],["Отвечаю «привет», через час мы снова вместе и выбираем кота","witch"],["Уже еду, я всё равно не сплю","chaos"],["Не отвечаю, у меня режим и белок","bro"]]],
+ ["Почему ты вообще проходишь этот тест?",
+  [["Скинули подружки, мне надо ЗНАТЬ","diva"],["Уверен(а), что выйдет «натурал». Проверяю","straight"],["Интересно, как тут устроена методология","cat"],["Сижу на привале, есть 5 минут и связь","hike"]]],
+ ["Последний вопрос. Твой девиз:",
+  [["«Если не блестит, зачем оно»","diva"],["«Никаких выходных от зала»","bro"],["«Сначала чувства, потом переезд. Иногда наоборот»","witch"],["«Я не такой(ая)… но мне интересно»","straight"]]]
+];
+
+// сколько раз каждый тип вообще встречается в вариантах — чтобы сравнивать честно, в процентах
+const APPEAR = {}; Object.keys(TYPES).forEach(k=>APPEAR[k]=0);
+Q.forEach(q=>q[1].forEach(o=>APPEAR[o[1]]++));
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const $=id=>document.getElementById(id);
+const LETTERS=["А","Б","В","Г"];
+let order=[], answers=[], cur=0;
+
+function show(id){["intro","quiz","result"].forEach(s=>$(s).hidden=(s!==id));window.scrollTo(0,0)}
+
+function start(){order=Q.map(q=>shuffle(q[1]));answers=new Array(Q.length).fill(null);cur=0;show("quiz");render()}
+
+function render(){
+  const q=Q[cur];
+  $("qtext").textContent=q[0];
+  $("count").textContent=String(cur+1).padStart(2,"0")+"/"+Q.length;
+  $("barfill").style.width=(cur/Q.length*100)+"%";
+  const box=$("opts"); box.innerHTML="";
+  order[cur].forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="opt"+(answers[cur]===o[1]?" picked":"");
+    b.id="opt-"+cur+"-"+i;
+    b.innerHTML='<span class="k">'+LETTERS[i]+'</span><span></span>';
+    b.lastChild.textContent=o[0];
+    b.addEventListener("click",()=>pick(o[1],b));
+    box.appendChild(b);
+  });
+  $("back").disabled=(cur===0);
+}
+
+let locked=false;
+function pick(type,btn){
+  if(locked)return; locked=true;
+  answers[cur]=type;
+  btn.classList.add("picked");
+  setTimeout(()=>{locked=false; if(cur<Q.length-1){cur++;render()}else{finish()}},220);
+}
+
+function finish(){
+  $("barfill").style.width="100%";
+  const picks={}; Object.keys(TYPES).forEach(k=>picks[k]=0);
+  answers.forEach(t=>{if(t)picks[t]++});
+  const share={}; Object.keys(TYPES).forEach(k=>share[k]=picks[k]/APPEAR[k]);
+  const total=Object.values(share).reduce((a,b)=>a+b,0)||1;
+  const ranked=Object.keys(TYPES).sort((a,b)=>share[b]-share[a]||picks[b]-picks[a]);
+  const top=ranked[0], T=TYPES[top];
+  const pct=k=>Math.round(share[k]/total*100);
+
+  $("remoji").textContent=T.e; $("rname").textContent=T.n; $("rtext").textContent=T.t;
+  const mix=$("mix"); mix.innerHTML="";
+  ranked.filter(k=>picks[k]>0).forEach((k,i)=>{
+    const r=document.createElement("div"); r.className="mixrow"+(i===0?" top":"");
+    r.innerHTML='<span class="nm"></span><span class="pc"></span><span class="tr"><i></i></span>';
+    r.querySelector(".nm").textContent=TYPES[k].e+" "+TYPES[k].n;
+    r.querySelector(".pc").textContent=pct(k)+"%";
+    r.querySelector("i").style.width=pct(k)+"%";
+    mix.appendChild(r);
+  });
+
+  const msg="Я прошёл(ла) тест «Какой ты гей?» и я — "+T.n+" "+T.e+" ("+pct(top)+"%). А ты?";
+  const link=SHARE_URL||location.href;
+  $("tgshare").href="https://t.me/share/url?url="+encodeURIComponent(link)+"&text="+encodeURIComponent(msg);
+  $("copy").onclick=()=>{
+    const txt=msg+" "+link;
+    const done=()=>{$("toast").textContent="Скопировано, вставляй в чат"};
+    try{navigator.clipboard.writeText(txt).then(done,()=>{$("toast").textContent=txt})}catch(e){$("toast").textContent=txt}
+  };
+  $("toast").textContent="";
+  show("result");
+}
+
+$("start").addEventListener("click",start);
+$("again").addEventListener("click",start);
+$("back").addEventListener("click",()=>{if(cur>0){cur--;render()}});
+document.addEventListener("keydown",e=>{
+  if($("quiz").hidden)return;
+  const i=["1","2","3","4"].indexOf(e.key);
+  if(i>-1){const b=$("opts").children[i]; if(b)b.click()}
+});
+</script>
+</body>
+</html>
